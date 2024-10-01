@@ -1,6 +1,7 @@
 import { resolve } from 'path'
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import react from '@vitejs/plugin-react'
+import macrosPlugin from 'vite-plugin-babel-macros'
 
 export default defineConfig({
   main: {
@@ -17,6 +18,23 @@ export default defineConfig({
         '@preload': resolve('src/preload')
       }
     },
-    plugins: [react()]
+    plugins: [
+      react({
+        babel: {
+          plugins: [
+            'babel-plugin-macros',
+            'babel-plugin-styled-components'
+            // [
+            //   'babel-plugin-styled-components',
+            //   {
+            //     displayName: true, //! dev 開啟
+            //     ssr: false
+            //   }
+            // ]
+          ]
+        }
+      }),
+      macrosPlugin()
+    ]
   }
 })

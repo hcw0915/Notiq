@@ -26,17 +26,20 @@
     "@electron-toolkit/utils": "^3.0.0",
     "@icon-park/react": "^1.4.2",
     "@remix-run/router": "^1.19.2",
+    "@uiw/react-md-editor": "^4.0.4",
     "better-sqlite3": "^11.3.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "electron-updater": "^6.1.7",
     "localforage": "^1.10.0",
+    "lodash-es": "^4.17.21",
     "mantine-contextmenu": "^7.12.2",
     "match-sorter": "^6.3.4",
     "mockjs": "^1.1.0",
-
     "react-router-dom": "^6.26.2",
     "sort-by": "^1.2.0",
+    "styled-components": "^6.1.13",
+    "twin.macro": "^3.4.1",
     "zustand": "^4.5.5"
   },
   "devDependencies": {
@@ -51,6 +54,8 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
+    "babel-plugin-macros": "^3.1.0",
+    "babel-plugin-styled-components": "^2.1.4",
     "electron": "^31.0.2",
     "electron-builder": "^24.13.3",
     "electron-vite": "^2.3.0",
@@ -63,6 +68,12 @@
     "sass": "^1.78.0",
     "tailwindcss": "^3.4.11",
     "typescript": "^5.5.2",
-    "vite": "^5.3.1"
+    "vite": "^5.3.1",
+    "vite-plugin-babel-macros": "^1.0.6"
+  },
+  "babelMacros": {
+    "twin": {
+      "preset": "styled-components"
+    }
   }
 }
