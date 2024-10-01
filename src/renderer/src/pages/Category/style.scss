@@ -1,0 +1,52 @@
+$height: 1.5rem;
+
+.category-page {
+  @apply h-screen w-screen;
+
+  display: grid;
+  grid-template:
+    'categories content' auto
+    'nav content' 2rem/10rem auto;
+
+  .categories {
+    @apply border-r bg-slate-100 text-xs text-slate-700 overflow-y-auto gap-1 flex flex-col;
+    grid-area: categories;
+
+
+    .item {
+      @apply px-2 py-1 truncate cursor-pointer flex items-center gap-1 hover:bg-slate-200 hover:rounded-md;
+      height: $height;
+
+      &.active {
+        @apply bg-blue-400 text-white mx-1 rounded-md;
+      }
+
+
+    }
+
+
+    .input {
+      @apply w-full px-1 truncate outline-none bg-slate-100;
+      height: $height;
+
+      input {
+        @apply h-full w-full rounded-md p-2;
+      }
+
+    }
+  }
+
+  .nav {
+    @apply border-r border-t bg-slate-100 flex justify-center items-center gap-2;
+    grid-area: nav;
+  }
+
+  .content {
+    grid-area: content;
+  }
+}
+
+
+.dragging {
+  @apply bg-gray-300;
+}

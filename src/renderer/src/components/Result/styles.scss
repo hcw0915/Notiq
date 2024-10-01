@@ -1,0 +1,11 @@
+.container {
+  @apply bg-slate-50 px-2.5 rounded-b-lg mt-[-0.625rem] pb-2;
+
+  .item {
+    @apply text-slate-700 truncate mb-1 px-2.5 py-1 rounded-lg hover:bg-orange-400 hover:text-white hover:rounded-lg hover:cursor-pointer;
+
+    &.active {
+      @apply bg-orange-400 text-white rounded-lg;
+    }
+  }
+}

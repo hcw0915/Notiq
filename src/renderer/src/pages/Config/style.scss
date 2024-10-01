@@ -1,0 +1,36 @@
+// .container {
+//   @apply bg-white w-screen h-screen;
+
+//   display: grid;
+//   grid-template:
+//     /* 兩格 提供拖動使用 不需要給名字 */
+//     '. . ' 2rem
+//     /* 中間兩格由最後自動計算 */
+//     'category content' auto
+//     'nav content' 2rem / 6rem 1fr; //! 這裡要去複習一下
+
+//   div {
+//     &:nth-child(1) {
+//       @apply border-r;
+//     }
+
+//     &:nth-child(1),
+//     &:nth-child(2) {
+//       -webkit-app-region: drag;
+//     }
+
+//     &.category {
+//       grid-area: category;
+//       @apply border-r;
+//     }
+
+//     &.content {
+//       grid-area: content;
+//     }
+
+//     &.nav {
+//       grid-area: nav;
+//       @apply border-r border-t;
+//     }
+//   }
+// }

@@ -1,0 +1,30 @@
+body {
+  // @apply bg-black;
+  @apply w-screen h-screen;
+}
+
+.drag {
+  -webkit-app-region: drag;
+}
+
+.nodrag,
+input,
+select,
+textarea,
+option {
+  -webkit-app-region: no-drag;
+}
+
+
+.contextMenu {
+  @apply rounded-md;
+  button {
+    @apply bg-[#2c3e50] text-white text-xs py-1.5 px-2 gap-2 hover:bg-[#34495e];
+    & > div {
+    }
+  }
+}
+
+.markdown > * {
+  all: revert;
+}
