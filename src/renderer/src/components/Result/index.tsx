@@ -1,7 +1,16 @@
-import { useDataStore } from '@renderer/stores/codeStore'
 import { useEffect, useState } from 'react'
-import './styles.scss'
-// import { api } from 'src/preload'
+import tw, { styled } from 'twin.macro'
+
+import { useDataStore } from '@renderer/stores/codeStore'
+
+const ResultContainer = styled.div`
+  ${tw`bg-slate-50 px-2.5 rounded-b-lg mt-[-0.625rem] pb-2`}
+`
+
+const ResultItem = styled.div<{ isActive: boolean }>`
+  ${tw`text-slate-700 truncate mb-1 px-2.5 py-1 rounded-lg hover:bg-orange-400 hover:text-white hover:rounded-lg hover:cursor-pointer`}
+  ${(p) => p.isActive && tw`bg-orange-400 text-white rounded-lg`}
+`
 
 const Result = () => {
   const data = useDataStore((s) => s.data)
@@ -19,7 +28,9 @@ const Result = () => {
 
   const selectItem = async () => {
     if (!data?.length) return
-    await navigator.clipboard.writeText(data[currentIndex].content)
+    //! 這裡有 ```js 這種地方要處理
+    const copyText = data[currentIndex].content.replace(/```/g, '')
+    await navigator.clipboard.writeText(copyText)
     window.api.hideWindow()
     setSearch('')
   }
@@ -31,18 +42,18 @@ const Result = () => {
       case 'ArrowUp':
         if (currentIndex === 0) return
         setCurrentIndex((prev) => prev - 1)
-        break
+        return
       case 'ArrowDown':
         if (currentIndex === data?.length - 1) return
         setCurrentIndex((prev) => prev + 1)
-        break
+        return
       case 'Enter':
         selectItem()
         window.api.closeWindow('search')
-        break
+        return
       case 'Escape':
         window.api.closeWindow('search')
-        break
+        return
       default:
         return null
     }
@@ -61,23 +72,23 @@ const Result = () => {
   }, [data])
 
   return (
-    <main className="container">
+    <ResultContainer>
       {search &&
         data?.map((item, idx) => {
           const isActive = currentIndex === idx
           return (
-            <div
+            <ResultItem
               key={item.id}
-              className={`item ${isActive ? 'active' : ''}`}
+              isActive={isActive}
               onClick={selectItem}
               onMouseEnter={onMouseEnterIndex(idx)}
               onMouseLeave={onMouseLeaveIndex}
             >
               {item.title}
-            </div>
+            </ResultItem>
           )
         })}
-    </main>
+    </ResultContainer>
   )
 }
 

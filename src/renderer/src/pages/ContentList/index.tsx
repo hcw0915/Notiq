@@ -1,38 +1,62 @@
-import { Form, NavLink, Outlet, useLoaderData, useParams, useSubmit } from 'react-router-dom'
-import './style.scss'
-import { useContextMenu } from 'mantine-contextmenu'
-
+import { Form, NavLink, Outlet, useLoaderData, useSubmit } from 'react-router-dom'
 import dayjs from 'dayjs'
+import { useContextMenu } from 'mantine-contextmenu'
+import tw, { styled } from 'twin.macro'
+
 import { Add, Delete, Edit } from '@icon-park/react'
-// import { ChangeEvent, useMemo, useState } from 'react'
+
+const ContentListContainer = styled.main`
+  ${tw`grid h-screen text-xs text-slate-700 bg-white`}
+  grid-template: 'list content' auto / 15.625rem auto;
+`
+
+const ContentListWrapper = styled.div`
+  ${tw`bg-slate-50 border-r overflow-y-auto cursor-pointer`}
+  grid-area: list;
+`
+
+const ContentWrapper = styled.div`
+  grid-area: content;
+`
+
+const SearchWrapper = styled.div`
+  ${tw`border-b px-3 flex justify-between items-center`}
+`
+
+const SearchInput = styled.input`
+  ${tw`outline-none py-2 w-full text-sm font-bold`}
+`
+
+const StyledNavLink = styled(NavLink)`
+  ${tw`truncate p-1 cursor-pointer flex items-center justify-between gap-1 mx-1 hover:bg-slate-200`}
+  &.active {
+    ${tw`bg-blue-400 text-white mx-1 rounded-md`};
+  }
+`
+
+const ContentText = styled.div`
+  ${tw`truncate`}
+`
+
+const ContentTimeStamp = styled.div`
+  ${tw`text-[0.625rem]`}
+`
 
 export const ContentList = () => {
-  const params = useParams()
-
   const contents = useLoaderData() as ContentType[]
   const { showContextMenu } = useContextMenu()
 
   const submit = useSubmit()
-  // const [search, setSearch] = useState('')
-
-  // const onSearch = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setSearch(e.target.value)
-  // }
-
-  // const filterContents = useMemo(() => {
-  //   return contents.filter((content) => content.title.toLowerCase().includes(search))
-  // }, [search, contents])
 
   return (
-    <main className="contentList-page">
-      <div className="list">
+    <ContentListContainer>
+      <ContentListWrapper>
         <Form>
-          <div className="border-b px-3 flex justify-between items-center">
-            <input
+          <SearchWrapper>
+            <SearchInput
               name="search"
               type="text"
               placeholder="搜索..."
-              className="outline-none py-2 w-full text-sm font-bold"
               // value={search}
               // onChange={onSearch}
               onChange={(e) => submit(e.target.form)}
@@ -44,12 +68,12 @@ export const ContentList = () => {
               strokeWidth={2}
               onClick={() => submit(null, { method: 'POST' })}
             />
-          </div>
+          </SearchWrapper>
         </Form>
 
         {contents.map((content) => {
           return (
-            <NavLink
+            <StyledNavLink
               to={`/config/category/contentList/${content.category_id}/content/${content.id}`}
               key={content.id}
               className="flex items-center justify-center"
@@ -78,15 +102,15 @@ export const ContentList = () => {
                 { className: 'contextMenu' }
               )}
             >
-              <div className="truncate">{content.title}</div>
-              <div className="text-[0.625rem]">{dayjs(content.created_at).format('YY/MM/DD')}</div>
-            </NavLink>
+              <ContentText>{content.title}</ContentText>
+              <ContentTimeStamp>{dayjs(content.created_at).format('YY/MM/DD')}</ContentTimeStamp>
+            </StyledNavLink>
           )
         })}
-      </div>
-      <div className="content">
+      </ContentListWrapper>
+      <ContentWrapper>
         <Outlet />
-      </div>
-    </main>
+      </ContentWrapper>
+    </ContentListContainer>
   )
 }
