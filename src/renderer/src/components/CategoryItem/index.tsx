@@ -3,10 +3,30 @@ import { useContent } from '@renderer/hooks/useContent'
 import { useDataStore } from '@renderer/stores/codeStore'
 import { useContextMenu } from 'mantine-contextmenu'
 import { NavLink, useFetcher, useSubmit } from 'react-router-dom'
+import tw, { styled } from 'twin.macro'
 
 type CategoryItemProps = {
   category: CategoryType
+  key: number // 這樣很奇怪
 }
+
+const StyledNavLink = styled(NavLink)`
+  ${tw`h-[1.5rem] mb-1 px-2 py-1 truncate cursor-pointer flex items-center gap-1 
+    hover:bg-slate-200 hover:rounded-md 
+  `}
+  // NavLink 要處理的樣式問題: https://stackoverflow.com/questions/73419801/how-to-make-activeclass-on-navlink-styled-component
+  &.active {
+    ${tw`bg-blue-400 text-white mx-1 rounded-md`}
+  }
+`
+
+const InputWrapper = styled.div`
+  ${tw`w-full  h-[1.5rem] px-1 truncate outline-none bg-slate-100`}
+`
+
+const Input = styled.input`
+  ${tw`h-full w-full rounded-md p-2`}
+`
 
 export const CategoryItem = (props: CategoryItemProps) => {
   const { category } = props
@@ -34,14 +54,13 @@ export const CategoryItem = (props: CategoryItemProps) => {
   return (
     <>
       {editCategoryId === category.id ? (
-        <div className="input">
-          <input type="text" defaultValue={category.name} autoFocus onKeyDown={onRenameEnter} />
-        </div>
+        <InputWrapper>
+          <Input type="text" defaultValue={category.name} autoFocus onKeyDown={onRenameEnter} />
+        </InputWrapper>
       ) : (
-        <NavLink
+        <StyledNavLink
           to={`/config/category/contentList/${category.id}`}
-          //! 不需要再另外記住哪個是 active 可以透過 <NavLink 獲得 className isActive 狀態
-          className={({ isActive }) => (isActive ? 'active item' : 'item')}
+          //! 不需要再另外記住哪個是 active 可以透過 <StyledNavLink 獲得 className isActive 狀態
           onDoubleClick={onDoubleClickEdit(category.id)}
           onDragOver={(e) => {
             //! onDrop 需要先取消 Over 的預設事件
@@ -85,7 +104,7 @@ export const CategoryItem = (props: CategoryItemProps) => {
         >
           <FolderClose theme="outline" size="12" strokeWidth={3} />
           <div className="truncate">{category.name}</div>
-        </NavLink>
+        </StyledNavLink>
       )}
     </>
   )
