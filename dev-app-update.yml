@@ -1,3 +1,28 @@
 provider: generic
 url: https://example.com/auto-updates
-updaterCacheDirName: snippets-updater
+updaterCacheDirName: Notiq-updater
+
+# 各個配置項的解釋
+# provider: generic
+
+# 這是指定更新服務提供者的類型。generic 表示應用的更新文件（如 .zip、.exe、.dmg 等）存放在一個通用的 URL 上，而不是使用像 GitHub、S3 這樣的具體服務平台。這意味著更新文件可以托管在任何靜態服務器或自定義的文件服務器上。
+# url: https://example.com/auto-updates
+
+# 這是應用自動更新時下載更新文件的 URL。當應用檢查更新時，它會去這個 URL 下查找有無可用的更新。如果有新版本，它會自動下載並安裝更新。這裡的 URL 應該指向存放應用更新文件的路徑。
+# updaterCacheDirName: Notiq-updater
+
+# 這是指定 Electron 應用的自動更新功能使用的緩存目錄名稱。當應用下載更新文件時，這些文件會被緩存在這個目錄下，以便在安裝更新時使用。
+# Notiq-updater 是這個緩存目錄的名稱，這個名稱可以自定義為任何你喜歡的名稱。該目錄會存放在用戶的本地文件系統中。
+# 整體功能
+# 這段配置是為了實現 Electron 應用的自動更新。當用戶啟動應用時，應用會根據 url 配置檢查服務器上是否有更新文件。如果有新版本可用，應用會下載更新並將其緩存在 updaterCacheDirName 指定的目錄中，然後進行更新。
+
+# 這是如何運作的流程：
+
+# 應用啟動時檢查指定的 URL (https://example.com/auto-updates) 以查看是否有新版本。
+# 如果有新版本，應用會下載更新文件並將其暫時存放在 Notiq-updater 緩存目錄中。
+# 一旦下載完成，應用會提示用戶重啟以應用更新，或者在下一次啟動時自動應用更新。
+# 使用場景
+# 你有一個 Electron 應用，並且你想實現自動更新功能。
+# 你使用了一個通用的文件托管服務器來存放更新文件，而不是使用像 GitHub Release、S3 等具體的服務平台。
+# 你希望定義一個自定義的緩存目錄來存放下載的更新文件。
+# 這種配置適合那些自己搭建更新服務器，並且希望應用能自動檢查和下載更新的情況。

@@ -1,7 +1,22 @@
-appId: com.electron.app
-productName: snippets
+# 應用程序的唯一標識符
+# 影響：用於識別您的應用，影響安裝位置和系統識別
+# 示例：如果設置為 com.mycompany.notiq，應用將安裝在 /Applications/Notiq.app
+appId: com.mycompany.notiq
+
+# 產品名稱
+# 影響：顯示在 Finder、Dock 和關於窗口中的應用名稱
+# 示例：如果設置為 "Notiq"，用戶將在 Dock 中看到 "Notiq" 圖標
+productName: Notiq
+
+# 構建資源的目錄
+# 影響：指定應用圖標等資源文件的位置
+# 示例：如果設置為 build，您應該將 .icns 文件放在 build 目錄中
 directories:
   buildResources: build
+
+# 指定打包時要包含的文件和排除的文件
+# 影響：決定哪些文件會被打包到最終的應用中
+# 示例：'!src/*' 表示 src 目錄下的文件不會被打包
 files:
   - '!**/.vscode/*'
   - '!src/*'
@@ -9,37 +24,74 @@ files:
   - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
   - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+
+# 指定不打包進 asar 的文件
+# 影響：允許某些文件在運行時直接訪問，而不是從 asar 歸檔中讀取
+# 示例：如果您有需要在運行時動態加載的插件，可以放在 resources 目錄中
 asarUnpack:
   - resources/**
-win:
-  executableName: snippets
-nsis:
-  artifactName: ${name}-${version}-setup.${ext}
-  shortcutName: ${productName}
-  uninstallDisplayName: ${productName}
-  createDesktopShortcut: always
+
+# macOS 特定配置
 mac:
+  # 繼承主應用的權限
+  # 影響：確保應用的輔助進程具有與主應用相同的權限
   entitlementsInherit: build/entitlements.mac.plist
+
+  # 擴展 Info.plist 文件
+  # 影響：添加額外的權限請求說明
+  # 示例：當應用首次請求訪問攝像頭時，系統會顯示 "Application requests access to the device's camera." 的提示
   extendInfo:
     - NSCameraUsageDescription: Application requests access to the device's camera.
     - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
     - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
+
+  # 是否進行公證
+  # 影響：決定是否將應用提交給 Apple 進行公證，這是分發 macOS 應用的要求
+  # 示例：如果設置為 true，您需要提供 Apple ID 和應用專用密碼
   notarize: false
+
+# DMG 配置（用於 macOS）
 dmg:
+  # 影響：決定生成的 DMG 文件的名稱格式
+  # 示例：如果 name 是 "notiq" 且 version 是 "1.0.0"，生成的文件名將是 "notiq-1.0.0.dmg"
+  # name / version 來自於 package.json
   artifactName: ${name}-${version}.${ext}
-linux:
-  target:
-    - AppImage
-    - snap
-    - deb
-  maintainer: electronjs.org
-  category: Utility
-appImage:
-  artifactName: ${name}-${version}.${ext}
+
+# 是否需要重新編譯原生模塊
+# 影響：決定是否在打包過程中重新編譯原生 Node.js 模塊
+# 示例：如果您使用了 node-sqlite3 這樣的原生模塊，可能需要設置為 true
 npmRebuild: false
+
+# 自動更新配置
 publish:
+  # 影響：指定如何發布和更新您的應用
+  # 示例：如果您有自己的更新服務器，可以在這裡指定 URL
   provider: generic
   url: https://example.com/auto-updates
-electronDownload:
-  mirror: https://npmmirror.com/mirrors/electron/
+
+# publish:
+#   provider: github
+#   owner: your-github-username
+#   repo: your-repo-name
+
+
+# 以下是其他平台的配置，已被註釋掉
+# win:
+#   executableName: Notiq
+# nsis:
+#   artifactName: ${name}-${version}-setup.${ext}
+#   shortcutName: ${productName}
+#   uninstallDisplayName: ${productName}
+#   createDesktopShortcut: always
+# linux:
+#   target:
+#     - AppImage
+#     - snap
+#     - deb
+#   maintainer: electronjs.org
+#   category: Utility
+# appImage:
+#   artifactName: ${name}-${version}.${ext}
+# electronDownload:
+#   mirror: https://npmmirror.com/mirrors/electron/

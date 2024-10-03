@@ -5,10 +5,12 @@ import {
   globalShortcut,
   ipcMain,
   // IpcMainEvent, // 正常 on
-  IpcMainInvokeEvent // promise handle
+  IpcMainInvokeEvent, // promise handle
+  screen
 } from 'electron'
-import { getWindowByName } from './window'
+
 import { findOne } from './db/query'
+import { getWindowByName } from './window'
 
 export type ShortCutTypes = 'search'
 
@@ -35,19 +37,36 @@ ipcMain.handle('shortCut', (_event: IpcMainInvokeEvent, type: ShortCutTypes) => 
       return registerSearchShortCut(win, configData.shortCut)
     }
     default:
-      break
+      return
   }
 })
 // }
 
-// 搜索使用
-
+// 搜索欄位使用
 function registerSearchShortCut(win: BrowserWindow, shortCut: string) {
   const ret = globalShortcut.register(shortCut, () => {
-    win.isVisible() ? win.hide() : win.show()
+    if (win.isVisible()) {
+      win.hide()
+    } else {
+      const mousePos = screen.getCursorScreenPoint()
+      const currentDisplay = screen.getDisplayNearestPoint(mousePos)
+
+      // 將窗口移動到當前顯示器的工作區
+      win.setPosition(currentDisplay.workArea.x, currentDisplay.workArea.y)
+
+      win.center()
+      win.show()
+      win.focus()
+    }
   })
+
+  if (!ret) {
+    console.error('快捷鍵註冊失敗')
+    // 顯示錯誤對話框
+    // dialog.showErrorBox('溫馨提示', '註冊失效')
+  }
+
   return ret
-  // if (!ret) dialog.showErrorBox('溫馨提示', '註冊失效')
 }
 
 app.on('will-quit', () => {

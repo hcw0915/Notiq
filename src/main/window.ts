@@ -1,4 +1,5 @@
 import { app, BrowserWindow, IpcMainEvent, IpcMainInvokeEvent } from 'electron'
+
 import { createWindow, OptionsType } from './createWindow'
 
 // 窗口管理統一透過這裡做配置管理
@@ -7,8 +8,12 @@ export const config = {
     id: 0,
     options: {
       initShow: true,
+      x: 1000,
       hash: '',
-      openDevTools: false
+      openDevTools: false,
+
+      // custom
+      enabledBlurHide: true
     }
   },
   code: {

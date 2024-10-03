@@ -1,18 +1,23 @@
-import { is } from '@electron-toolkit/utils'
-import { BrowserWindow, BrowserWindowConstructorOptions, shell } from 'electron'
-import { join } from 'path'
+import { BrowserWindow, BrowserWindowConstructorOptions, screen, shell } from 'electron'
 import url from 'node:url'
+import { join } from 'path'
+
+import { is } from '@electron-toolkit/utils'
+
 import icon from '../../resources/icon.png?asset'
 
 export interface OptionsType extends Partial<BrowserWindowConstructorOptions> {
   openDevTools?: boolean
   hash?: string
   initShow?: boolean
+  enabledBlurHide?: boolean
 }
 
 export function createWindow(options: OptionsType): BrowserWindow {
   // 獲取主視窗寬高
   // const { width: winWidth } = screen.getPrimaryDisplay().workAreaSize
+
+  //! Todo: 要處理多視窗開始程式 的問題
 
   const width = 500
   const height = 500
@@ -23,8 +28,6 @@ export function createWindow(options: OptionsType): BrowserWindow {
         width,
         height,
         center: true,
-        // x: winWidth - width,
-        y: 200,
         show: true,
         frame: false,
         transparent: true, // 背景透明
@@ -47,6 +50,12 @@ export function createWindow(options: OptionsType): BrowserWindow {
 
   configWindow.on('ready-to-show', () => {
     options.initShow && configWindow.show()
+  })
+
+  configWindow.on('blur', () => {
+    if (options.enabledBlurHide) {
+      configWindow.hide()
+    }
   })
 
   configWindow.webContents.setWindowOpenHandler((details) => {
